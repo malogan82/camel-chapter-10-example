@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:foo="http://example.com/person"
+    xmlns:prop="http://camel.apache.org/schema/placeholder"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans                  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd                 http://camel.apache.org/schema/spring                  http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <bean id="replica01" class="it.marco.camel.beans.Replica01"/>
+    <bean
+        class="org.apache.activemq.artemis.jms.client.ActiveMQJMSConnectionFactory" id="connectionFactory">
+        <constructor-arg name="uri" value="tcp://localhost:61616"/>
+        <constructor-arg name="user" value="admin"/>
+        <constructor-arg name="password" value="admin"/>
+    </bean>
+    <bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="activemq">
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+    <camelContext id="camelContext-6181de96-d9a3-4d14-817d-d295a4a6a151" xmlns="http://camel.apache.org/schema/spring">
+        <route>
+		   <from uri="jms:HighVolumeQ-concurrent?concurrentConsumers=3"/>
+		   <to uri="bean:replica01"/>
+		 </route>
+    </camelContext>
+</beans>
