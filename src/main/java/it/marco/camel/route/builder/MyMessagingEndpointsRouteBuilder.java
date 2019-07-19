@@ -52,6 +52,9 @@ public class MyMessagingEndpointsRouteBuilder extends RouteBuilder {
 		from("activemq:topic:news?clientId=conn01&durableSubscriptionName=John.Doe")
 	    	.bean("replica01")
 	    	.log("from replica01 ----------> ${body}");
+		
+		from("activemq:topic:news-concurrent?clientId=conn01&durableSubscriptionName=John.Doe")
+			.to("seda:fanout");
 			
 	}
 

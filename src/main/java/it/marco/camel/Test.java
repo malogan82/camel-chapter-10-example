@@ -61,6 +61,9 @@ public class Test {
 		producerTemplate.sendBodyAndHeader("seda:a","TESTDISPATCHER2","CountryCode","IE");
 		producerTemplate.sendBodyAndHeader("seda:a","TESTDISPATCHER3","CountryCode","DE");
 		producerTemplate.sendBody("activemq:topic:news","TEST-TOPIC-1");
+		producerTemplate.sendBody("activemq:topic:news-concurrent","TEST-TOPIC-CONCURRENT-1");
+		producerTemplate.sendBody("activemq:topic:news-concurrent","TEST-TOPIC-CONCURRENT-2");
+		producerTemplate.sendBody("activemq:topic:news-concurrent","TEST-TOPIC-CONCURRENT-3");
 		try {
 			Thread.sleep(20000);;
 			main.stop();
