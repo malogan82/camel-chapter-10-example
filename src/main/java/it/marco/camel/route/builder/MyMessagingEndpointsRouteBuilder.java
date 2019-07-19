@@ -2,6 +2,8 @@ package it.marco.camel.route.builder;
 
 import org.apache.camel.builder.RouteBuilder;
 
+import it.marco.camel.processors.MyProcessor;
+
 public class MyMessagingEndpointsRouteBuilder extends RouteBuilder {
 
 	@Override
@@ -42,6 +44,13 @@ public class MyMessagingEndpointsRouteBuilder extends RouteBuilder {
 		
 		from(String.format("activemq:dispatcher?selector=%s",java.net.URLEncoder.encode("CountryCode='DE'","UTF-8")))
 			.bean("replica03");
+		
+		from("seda:a")
+			.filter(header("CountryCode").isEqualTo("US"))
+			.process(new MyProcessor());
+		
+		from("activemq:topic:news?clientId=conn01&durableSubscriptionName=John.Doe").
+	    	bean("replica01");
 			
 	}
 

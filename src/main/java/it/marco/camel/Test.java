@@ -57,8 +57,12 @@ public class Test {
 		producerTemplate.sendBodyAndHeader("activemq:dispatcher","TESTDISPATCHER1","CountryCode","US");
 		producerTemplate.sendBodyAndHeader("activemq:dispatcher","TESTDISPATCHER2","CountryCode","IE");
 		producerTemplate.sendBodyAndHeader("activemq:dispatcher","TESTDISPATCHER3","CountryCode","DE");
+		producerTemplate.sendBodyAndHeader("seda:a","TESTDISPATCHER1","CountryCode","US");
+		producerTemplate.sendBodyAndHeader("seda:a","TESTDISPATCHER2","CountryCode","IE");
+		producerTemplate.sendBodyAndHeader("seda:a","TESTDISPATCHER3","CountryCode","DE");
+		producerTemplate.sendBody("activemq:topic:news","TEST-TOPIC-1");
 		try {
-			Thread.sleep(10000);;
+			Thread.sleep(20000);;
 			main.stop();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(),e);
