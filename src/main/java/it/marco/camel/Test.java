@@ -55,6 +55,7 @@ public class Test {
 		LOGGER.info(responseConcurrent2);
 		LOGGER.info(responseConcurrent3);
 		try {
+			Thread.sleep(10000);;
 			main.stop();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(),e);
