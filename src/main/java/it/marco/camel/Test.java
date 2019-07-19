@@ -54,6 +54,9 @@ public class Test {
 		LOGGER.info(responseConcurrent1);
 		LOGGER.info(responseConcurrent2);
 		LOGGER.info(responseConcurrent3);
+		producerTemplate.sendBodyAndHeader("activemq:dispatcher","TESTDISPATCHER1","CountryCode","US");
+		producerTemplate.sendBodyAndHeader("activemq:dispatcher","TESTDISPATCHER2","CountryCode","IE");
+		producerTemplate.sendBodyAndHeader("activemq:dispatcher","TESTDISPATCHER3","CountryCode","DE");
 		try {
 			Thread.sleep(10000);;
 			main.stop();

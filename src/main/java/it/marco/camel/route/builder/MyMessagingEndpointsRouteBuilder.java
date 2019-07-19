@@ -33,6 +33,15 @@ public class MyMessagingEndpointsRouteBuilder extends RouteBuilder {
 		from("seda:fanout?multipleConsumers=true")
 			.bean("replica03")
 			.log("from replica03 ----------> ${body}");
+		
+		from(String.format("activemq:dispatcher?selector=%s",java.net.URLEncoder.encode("CountryCode='US'","UTF-8")))
+			.bean("replica01");
+		
+		from(String.format("activemq:dispatcher?selector=%s",java.net.URLEncoder.encode("CountryCode='IE'","UTF-8")))
+			.bean("replica02");
+		
+		from(String.format("activemq:dispatcher?selector=%s",java.net.URLEncoder.encode("CountryCode='DE'","UTF-8")))
+			.bean("replica03");
 			
 	}
 
