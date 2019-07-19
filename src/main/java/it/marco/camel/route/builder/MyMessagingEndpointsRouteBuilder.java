@@ -55,6 +55,18 @@ public class MyMessagingEndpointsRouteBuilder extends RouteBuilder {
 		
 		from("activemq:topic:news-concurrent?clientId=conn01&durableSubscriptionName=John.Doe")
 			.to("seda:fanout");
+		
+		from("direct:start").to("activemq:topic:foo");
+
+		from("activemq:topic:foo?clientId=1&durableSubscriptionName=bar1").to("direct:mock-result1");
+
+	    from("activemq:topic:foo?clientId=2&durableSubscriptionName=bar2").to("direct:mock-result2");
+	    
+	    from("direct:mock-result1")
+	    	.log("from direct:mock-result1 ----------> ${body}");
+	    
+	    from("direct:mock-result2")
+    		.log("from direct:mock-result2 ----------> ${body}");
 			
 	}
 

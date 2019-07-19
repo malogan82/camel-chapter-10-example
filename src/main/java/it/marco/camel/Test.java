@@ -64,6 +64,8 @@ public class Test {
 		producerTemplate.sendBody("activemq:topic:news-concurrent","TEST-TOPIC-CONCURRENT-1");
 		producerTemplate.sendBody("activemq:topic:news-concurrent","TEST-TOPIC-CONCURRENT-2");
 		producerTemplate.sendBody("activemq:topic:news-concurrent","TEST-TOPIC-CONCURRENT-3");
+		producerTemplate.sendBody("activemq:topic:foo","TEST-TOPIC-FOO-1");
+		producerTemplate.sendBody("activemq:topic:foo","TEST-TOPIC-FOO-2");
 		try {
 			Thread.sleep(20000);;
 			main.stop();
