@@ -49,8 +49,9 @@ public class MyMessagingEndpointsRouteBuilder extends RouteBuilder {
 			.filter(header("CountryCode").isEqualTo("US"))
 			.process(new MyProcessor());
 		
-		from("activemq:topic:news?clientId=conn01&durableSubscriptionName=John.Doe").
-	    	bean("replica01");
+		from("activemq:topic:news?clientId=conn01&durableSubscriptionName=John.Doe")
+	    	.bean("replica01")
+	    	.log("from replica01 ----------> ${body}");
 			
 	}
 
