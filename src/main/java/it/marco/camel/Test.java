@@ -45,9 +45,15 @@ public class Test {
 		String response1 = producerTemplate.requestBody("activemq:HighVolumeQ","TEST1",String.class);
 		String response2 = producerTemplate.requestBody("activemq:HighVolumeQ","TEST2",String.class);
 		String response3 = producerTemplate.requestBody("activemq:HighVolumeQ","TEST3",String.class);
+		String responseConcurrent1 = producerTemplate.requestBody("activemq:HighVolumeQ-concurrent","TESTCONCURRENT1",String.class);
+		String responseConcurrent2 = producerTemplate.requestBody("activemq:HighVolumeQ-concurrent","TESTCONCURRENT2",String.class);
+		String responseConcurrent3 = producerTemplate.requestBody("activemq:HighVolumeQ-concurrent","TESTCONCURRENT3",String.class);
 		LOGGER.info(response1);
 		LOGGER.info(response2);
 		LOGGER.info(response3);
+		LOGGER.info(responseConcurrent1);
+		LOGGER.info(responseConcurrent2);
+		LOGGER.info(responseConcurrent3);
 		try {
 			main.stop();
 		} catch (Exception e) {

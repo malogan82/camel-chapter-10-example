@@ -14,6 +14,10 @@ public class MyMessagingEndpointsRouteBuilder extends RouteBuilder {
 		
 		from("activemq:HighVolumeQ")
 			.bean("replica03");
+		
+		from("activemq:HighVolumeQ-concurrent?concurrentConsumers=3")
+			.bean("replica01");
+			
 	}
 
 }
