@@ -34,10 +34,13 @@ public class SpringTest {
 			String responseConcurrent1 = producerTemplate.requestBody("activemq:HighVolumeQ-concurrent","TESTCONCURRENT1",String.class);
 			String responseConcurrent2 = producerTemplate.requestBody("activemq:HighVolumeQ-concurrent","TESTCONCURRENT2",String.class);
 			String responseConcurrent3 = producerTemplate.requestBody("activemq:HighVolumeQ-concurrent","TESTCONCURRENT3",String.class);
+			producerTemplate.sendBody("activemq:topic:foo","TEST-TOPIC-FOO-1");
+			producerTemplate.sendBody("activemq:topic:foo","TEST-TOPIC-FOO-2");
 			LOGGER.info(responseConcurrent1);
 			LOGGER.info(responseConcurrent2);
 			LOGGER.info(responseConcurrent3);
 			try {
+				Thread.sleep(20000);
 				main.stop();
 			} catch (Exception e) {
 				LOGGER.error(e.getMessage(),e);

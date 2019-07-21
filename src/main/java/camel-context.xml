@@ -4,7 +4,7 @@
     xmlns:foo="http://example.com/person"
     xmlns:prop="http://camel.apache.org/schema/placeholder"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans                  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd                 http://camel.apache.org/schema/spring                  http://camel.apache.org/schema/spring/camel-spring.xsd">
-    <bean id="replica01" class="it.marco.camel.beans.Replica01"/>
+    <bean class="it.marco.camel.beans.Replica01" id="replica01"/>
     <bean
         class="org.apache.activemq.artemis.jms.client.ActiveMQJMSConnectionFactory" id="connectionFactory">
         <constructor-arg name="uri" value="tcp://localhost:61616"/>
@@ -14,10 +14,33 @@
     <bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="activemq">
         <property name="connectionFactory" ref="connectionFactory"/>
     </bean>
+    <bean class="org.apache.camel.component.jms.JmsComponent" id="jms">
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
     <camelContext id="camelContext-6181de96-d9a3-4d14-817d-d295a4a6a151" xmlns="http://camel.apache.org/schema/spring">
-        <route>
-		   <from uri="jms:HighVolumeQ-concurrent?concurrentConsumers=3"/>
-		   <to uri="bean:replica01"/>
-		 </route>
+        <route id="_route1">
+            <from id="_from1" uri="jms:HighVolumeQ-concurrent?concurrentConsumers=3"/>
+            <to id="_to1" uri="bean:replica01"/>
+        </route>
+        <route id="_route2">
+            <from id="_from2" uri="direct:start"/>
+            <to id="_to2" uri="activemq:topic:foo"/>
+        </route>
+        <route id="_route3">
+            <from id="_from3" uri="activemq:topic:foo?clientId=1;durableSubscriptionName=bar1"/>
+            <to id="_to3" uri="direct:mock-result1"/>
+        </route>
+        <route id="_route4">
+            <from id="_from4" uri="activemq:topic:foo?clientId=2;durableSubscriptionName=bar2"/>
+            <to id="_to4" uri="direct:mock-result2"/>
+        </route>
+        <route id="_route5">
+            <from id="_from5" uri="direct:mock-result1"/>
+            <log id="_log1" message="from direct:mock-result1 ----------> ${body}"/>
+        </route>
+        <route id="_route6">
+            <from id="_from6" uri="direct:mock-result2"/>
+            <log id="_log2" message="from direct:mock-result2 ----------> ${body}"/>
+        </route>
     </camelContext>
 </beans>

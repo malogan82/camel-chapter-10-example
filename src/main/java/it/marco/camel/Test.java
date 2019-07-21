@@ -67,7 +67,7 @@ public class Test {
 		producerTemplate.sendBody("activemq:topic:foo","TEST-TOPIC-FOO-1");
 		producerTemplate.sendBody("activemq:topic:foo","TEST-TOPIC-FOO-2");
 		try {
-			Thread.sleep(20000);;
+			Thread.sleep(20000);
 			main.stop();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(),e);
