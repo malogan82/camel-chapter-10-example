@@ -78,6 +78,14 @@ public class MyMessagingEndpointsRouteBuilder extends RouteBuilder {
 	    from("activemq:queue:Consumer.2.VirtualTopic.foo")
 	    	.to("direct:mock-result2");
 	    
+	    from("activemq:BalanceQueries")
+	    	.setProperty("userid", xpath("/Account/BalanceQuery/UserID").stringResult())
+	    	.beanRef("bankBean", "getUserAccBalance")
+	    	.to("velocity:file:src/scripts/acc_balance.vm")
+	    	.to("activemq:BalanceResults");
+	    
+	    from("activemq:BalanceResults")
+    		.log("from activemq:BalanceResults ----------> ${body}");
 	}
 
 }

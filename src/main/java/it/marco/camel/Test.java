@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.support.converter.SimpleMessageConverter;
 
+import it.marco.camel.beans.BankBean;
 import it.marco.camel.beans.Replica01;
 import it.marco.camel.beans.Replica02;
 import it.marco.camel.beans.Replica03;
@@ -30,6 +31,7 @@ public class Test {
 		main.bind("replica01", new Replica01());
 		main.bind("replica02", new Replica02());
 		main.bind("replica03", new Replica03());
+		main.bind("bankBean", new BankBean());
 		main.addRouteBuilder(new MyMessagingEndpointsRouteBuilder());
 		MyRunnable runnable = new MyRunnable(main);
 		Thread thread = new Thread(runnable);
@@ -42,32 +44,39 @@ public class Test {
 		LOGGER.info("MAIN STARTED");
 		CamelContext camelContext = main.getCamelContexts().get(0);
 		ProducerTemplate producerTemplate = camelContext.createProducerTemplate();
-//		String response1 = producerTemplate.requestBody("activemq:HighVolumeQ","TEST1",String.class);
-//		String response2 = producerTemplate.requestBody("activemq:HighVolumeQ","TEST2",String.class);
-//		String response3 = producerTemplate.requestBody("activemq:HighVolumeQ","TEST3",String.class);
-//		String responseConcurrent1 = producerTemplate.requestBody("activemq:HighVolumeQ-concurrent","TESTCONCURRENT1",String.class);
-//		String responseConcurrent2 = producerTemplate.requestBody("activemq:HighVolumeQ-concurrent","TESTCONCURRENT2",String.class);
-//		String responseConcurrent3 = producerTemplate.requestBody("activemq:HighVolumeQ-concurrent","TESTCONCURRENT3",String.class);
-//		LOGGER.info(response1);
-//		LOGGER.info(response2);
-//		LOGGER.info(response3);
-//		LOGGER.info(responseConcurrent1);
-//		LOGGER.info(responseConcurrent2);
-//		LOGGER.info(responseConcurrent3);
-//		producerTemplate.sendBodyAndHeader("activemq:dispatcher","TESTDISPATCHER1","CountryCode","US");
-//		producerTemplate.sendBodyAndHeader("activemq:dispatcher","TESTDISPATCHER2","CountryCode","IE");
-//		producerTemplate.sendBodyAndHeader("activemq:dispatcher","TESTDISPATCHER3","CountryCode","DE");
-//		producerTemplate.sendBodyAndHeader("seda:a","TESTDISPATCHER1","CountryCode","US");
-//		producerTemplate.sendBodyAndHeader("seda:a","TESTDISPATCHER2","CountryCode","IE");
-//		producerTemplate.sendBodyAndHeader("seda:a","TESTDISPATCHER3","CountryCode","DE");
-//		producerTemplate.sendBody("activemq:topic:news","TEST-TOPIC-1");
-//		producerTemplate.sendBody("activemq:topic:news-concurrent","TEST-TOPIC-CONCURRENT-1");
-//		producerTemplate.sendBody("activemq:topic:news-concurrent","TEST-TOPIC-CONCURRENT-2");
-//		producerTemplate.sendBody("activemq:topic:news-concurrent","TEST-TOPIC-CONCURRENT-3");
-//		producerTemplate.sendBody("activemq:topic:foo","TEST-TOPIC-FOO-1");
-//		producerTemplate.sendBody("activemq:topic:foo","TEST-TOPIC-FOO-2");
+		String response1 = producerTemplate.requestBody("activemq:HighVolumeQ","TEST1",String.class);
+		String response2 = producerTemplate.requestBody("activemq:HighVolumeQ","TEST2",String.class);
+		String response3 = producerTemplate.requestBody("activemq:HighVolumeQ","TEST3",String.class);
+		String responseConcurrent1 = producerTemplate.requestBody("activemq:HighVolumeQ-concurrent","TESTCONCURRENT1",String.class);
+		String responseConcurrent2 = producerTemplate.requestBody("activemq:HighVolumeQ-concurrent","TESTCONCURRENT2",String.class);
+		String responseConcurrent3 = producerTemplate.requestBody("activemq:HighVolumeQ-concurrent","TESTCONCURRENT3",String.class);
+		LOGGER.info(response1);
+		LOGGER.info(response2);
+		LOGGER.info(response3);
+		LOGGER.info(responseConcurrent1);
+		LOGGER.info(responseConcurrent2);
+		LOGGER.info(responseConcurrent3);
+		producerTemplate.sendBodyAndHeader("activemq:dispatcher","TESTDISPATCHER1","CountryCode","US");
+		producerTemplate.sendBodyAndHeader("activemq:dispatcher","TESTDISPATCHER2","CountryCode","IE");
+		producerTemplate.sendBodyAndHeader("activemq:dispatcher","TESTDISPATCHER3","CountryCode","DE");
+		producerTemplate.sendBodyAndHeader("seda:a","TESTDISPATCHER1","CountryCode","US");
+		producerTemplate.sendBodyAndHeader("seda:a","TESTDISPATCHER2","CountryCode","IE");
+		producerTemplate.sendBodyAndHeader("seda:a","TESTDISPATCHER3","CountryCode","DE");
+		producerTemplate.sendBody("activemq:topic:news","TEST-TOPIC-1");
+		producerTemplate.sendBody("activemq:topic:news-concurrent","TEST-TOPIC-CONCURRENT-1");
+		producerTemplate.sendBody("activemq:topic:news-concurrent","TEST-TOPIC-CONCURRENT-2");
+		producerTemplate.sendBody("activemq:topic:news-concurrent","TEST-TOPIC-CONCURRENT-3");
+		producerTemplate.sendBody("activemq:topic:foo","TEST-TOPIC-FOO-1");
+		producerTemplate.sendBody("activemq:topic:foo","TEST-TOPIC-FOO-2");
 		producerTemplate.sendBody("direct:start-virtual-topic","TEST-VIRTUAL-TOPIC-1");
 		producerTemplate.sendBody("direct:start-virtual-topic","TEST-VIRTUAL-TOPIC-2");
+		String xmlBody = "<?xml version='1.0' encoding='UTF-8'?>\r\n" + 
+						 "<Account>\r\n" + 
+						 "  <BalanceQuery>\r\n" + 
+						 "    <UserID>James.Strachan</UserID>\r\n" + 
+						 "  </BalanceQuery>\r\n" + 
+						 "</Account>";
+		producerTemplate.sendBody("activemq:BalanceResults",xmlBody);
 		try {
 			Thread.sleep(50000);
 			main.stop();
