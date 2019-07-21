@@ -42,5 +42,17 @@
             <from id="_from6" uri="direct:mock-result2"/>
             <log id="_log2" message="from direct:mock-result2 ----------> ${body}"/>
         </route>
+        <route id="_route7">
+            <from id="_from7" uri="direct:start-virtual-topic"/>
+            <to id="_to5" uri="activemq:topic:VirtualTopic.foo"/>
+        </route>
+        <route id="_route8">
+            <from id="_from8" uri="activemq:queue:Consumer.1.VirtualTopic.foo"/>
+            <to id="_to6" uri="direct:mock-result1"/>
+        </route>
+        <route id="_route9">
+            <from id="_from9" uri="activemq:queue:Consumer.2.VirtualTopic.foo"/>
+            <to id="_to7" uri="direct:mock-result2"/>
+        </route>
     </camelContext>
 </beans>
