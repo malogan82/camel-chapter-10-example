@@ -17,7 +17,20 @@
     <bean class="org.apache.camel.component.jms.JmsComponent" id="jms">
         <property name="connectionFactory" ref="connectionFactory"/>
     </bean>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
+	    <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+	    <property name="url" value="jdbc:hsqldb:mem:camel_jdbc"/>
+	    <property name="username" value="sa"/>
+	    <property name="password" value=""/>
+	</bean>
+	<bean id="messageIdRepository" class="org.apache.camel.processor.idempotent.jdbc.JdbcMessageIdRepository">
+		<constructor-arg ref="dataSource" />
+		<constructor-arg value="myProcessorName" />
+	</bean>
     <camelContext id="camelContext-6181de96-d9a3-4d14-817d-d295a4a6a151" xmlns="http://camel.apache.org/schema/spring">
+        <camel:errorHandler id="deadLetterChannel" type="DeadLetterChannel" deadLetterUri="mock:error">
+			<camel:redeliveryPolicy maximumRedeliveries="0" maximumRedeliveryDelay="0" logStackTrace="false" />
+		</camel:errorHandler>
         <route id="_route1">
             <from id="_from1" uri="jms:HighVolumeQ-concurrent?concurrentConsumers=3"/>
             <to id="_to1" uri="bean:replica01"/>
@@ -42,6 +55,14 @@
             <from id="_from6" uri="direct:mock-result2"/>
             <log id="_log2" message="from direct:mock-result2 ----------> ${body}"/>
         </route>
+        <route>
+            <from uri="direct:mock-result"/>
+            <log message="from direct:mock-result ----------> ${body}"/>
+        </route>
+        <route>
+            <from uri="direct:mock-duplicate"/>
+            <log message="from direct:mock-duplicate ----------> ${body}"/>
+        </route>
         <route id="_route7">
             <from id="_from7" uri="direct:start-virtual-topic"/>
             <to id="_to5" uri="activemq:topic:VirtualTopic.foo"/>
@@ -54,5 +75,17 @@
             <from id="_from9" uri="activemq:queue:Consumer.2.VirtualTopic.foo"/>
             <to id="_to7" uri="direct:mock-result2"/>
         </route>
+        <route id="JdbcMessageIdRepositoryTest" errorHandlerRef="deadLetterChannel">
+			<from uri="direct:start-idempotent"/>
+			<idempotentConsumer messageIdRepositoryRef="messageIdRepository" skipDuplicate="false">
+				<header>messageId</header>
+				<filter>
+					<property>CamelDuplicateMessage</property>
+                 	<to uri="direct:mock-duplicate"/>
+                 	<stop/>
+             	</filter>
+				<to uri="direct:mock-result" />
+			</idempotentConsumer>
+		</route>
     </camelContext>
 </beans>

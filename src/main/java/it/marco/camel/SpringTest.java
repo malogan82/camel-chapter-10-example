@@ -41,6 +41,8 @@ public class SpringTest {
 //			LOGGER.info(responseConcurrent3);
 			producerTemplate.sendBody("direct:start-virtual-topic","TEST-VIRTUAL-TOPIC-1");
 			producerTemplate.sendBody("direct:start-virtual-topic","TEST-VIRTUAL-TOPIC-2");
+			producerTemplate.sendBodyAndHeader("direct:start-idempotent","TEST-IDEMPOTENT-1","messageId","MESSAGEID");
+			producerTemplate.sendBodyAndHeader("direct:start-idempotent","TEST-IDEMPOTENT-2","messageId","MESSAGEID");
 			try {
 				Thread.sleep(50000);
 				main.stop();

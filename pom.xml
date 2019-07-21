@@ -25,6 +25,11 @@
       <version>${camel.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-sql</artifactId>
+      <version>${camel.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.7.12</version>
@@ -43,6 +48,11 @@
 	  <groupId>io.netty</groupId>
 	  <artifactId>netty-resolver</artifactId>
 	  <version>4.1.37.Final</version>
+	</dependency>
+	<dependency>
+	  <groupId>org.hsqldb</groupId>
+	  <artifactId>hsqldb</artifactId>
+	  <version>2.5.0</version>
 	</dependency>
   </dependencies>
 </project>
