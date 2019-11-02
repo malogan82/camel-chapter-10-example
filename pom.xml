@@ -6,7 +6,7 @@
   <name>camel-chapter-10-example</name>
   <description>Apache Camel Chapter 10 Example</description>
   <properties>
-   <camel.version>2.21.0.fuse-730078-redhat-00001</camel.version>
+   <camel.version>2.24.2</camel.version>
   </properties>
   <dependencies>
   	<dependency>
